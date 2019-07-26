@@ -20,8 +20,6 @@
 void funcaoTestes()
 {
     NegocioTeste negocioTeste;
-
-    //    negocioTeste.testeUeider();
     negocioTeste.testeDoDaniel();
 }
 

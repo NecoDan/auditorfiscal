@@ -52,7 +52,7 @@ void NegocioTeste::testeDoDaniel()
     //    }
 }
 
-void NegocioTeste::testeUeider()
+void NegocioTeste::testeCriacaoDatabase()
 {
     //db.removeDatabase("MASTER");
     //QSqlDatabase conexao = gm::DBUtil::conexao();

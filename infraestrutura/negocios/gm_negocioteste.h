@@ -21,7 +21,7 @@ class NegocioTeste : public QObject
 
         void testeDoDaniel();
 
-        void testeUeider();
+        void testeCriacaoDatabase();
 
     private:
 

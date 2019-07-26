@@ -66,7 +66,7 @@ namespace gm
         static QSqlDatabase configurarBancoSecundario(QString database="", QString pathBancoLeitura = QString());
 
         /**
-         * @author  Ueider Moraes
+         * @author  Daniel Santos
          * @date    03/07/2018
          * @brief   getDatabaseName
          * @return  um objeto QString
