@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/imagens">
+        <file>infraestrutura/recursos/imagens/alerta.png</file>
+        <file>infraestrutura/recursos/imagens/ajuda.png</file>
+        <file>infraestrutura/recursos/imagens/adicionar.png</file>
+        <file>infraestrutura/recursos/imagens/seta_esquerda.png</file>
+        <file>infraestrutura/recursos/imagens/seta_direita.png</file>
+        <file>infraestrutura/recursos/imagens/refresh.png</file>
+        <file>infraestrutura/recursos/imagens/ok_45.png</file>
+        <file>infraestrutura/recursos/imagens/limpar.png</file>
+        <file>infraestrutura/recursos/imagens/icon-visualizar.png</file>
+        <file>infraestrutura/recursos/imagens/editar.png</file>
+        <file>infraestrutura/recursos/imagens/contabil.png</file>
+        <file>infraestrutura/recursos/imagens/Checked-Checkbox-32.png</file>
+        <file>infraestrutura/recursos/imagens/canceladoProjeto.png</file>
+        <file>infraestrutura/recursos/imagens/Calendar-32.png</file>
+        <file>infraestrutura/recursos/imagens/status.png</file>
+        <file>infraestrutura/recursos/imagens/sped.png</file>
+        <file>infraestrutura/recursos/imagens/open.png</file>
+        <file>infraestrutura/recursos/imagens/ico_fechar.png</file>
+        <file>infraestrutura/recursos/imagens/checked.png</file>
+        <file>infraestrutura/recursos/imagens/delete_16.png</file>
+        <file>infraestrutura/recursos/imagens/branch-open.png</file>
+        <file>infraestrutura/recursos/imagens/branch-more.png</file>
+        <file>infraestrutura/recursos/imagens/branch-end.png</file>
+        <file>infraestrutura/recursos/imagens/branch-closed.png</file>
+        <file>infraestrutura/recursos/imagens/vline.png</file>
+        <file>infraestrutura/recursos/imagens/selecionar.png</file>
+        <file>infraestrutura/recursos/imagens/cancelar_32.png</file>
+    </qresource>
+    <qresource prefix="/css">
+        <file>infraestrutura/recursos/style.qss</file>
+    </qresource>
+    <qresource prefix="/"/>
+</RCC>

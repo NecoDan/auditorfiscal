@@ -1,0 +1,258 @@
+QLineEdit::enabled
+{
+    background-color: #FFF;
+    border-radius: 6px;
+    border: 1px solid;
+    border-color:#696969;
+    height:25px;
+    color:#000000;
+}
+
+QLineEdit::!enabled
+{
+    background-color: #DCDCDC;
+    border-radius: 6px;
+    border: 1px solid;
+    border-color:#696969;
+    color:#000000;
+}
+
+QLineEdit:focus {
+    background-color: #FFFEDC;
+    border-radius: 6px;
+    border: 1px solid;
+    border-color:#007dd1;
+    color:#000000;
+}
+
+
+/*
+QComboBox
+{
+    font: 20pt;
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid black;
+}
+*/
+
+QComboBox:focus {
+    background-color: #FFFEDC;
+    border-radius: 3px;
+    border: 1px solid;
+    border-color:#007dd1;
+    color:#000000;
+}
+
+QDateEdit:focus {
+    background-color: #FFFEDC;
+    border-radius: 3px;
+    border: 1px solid;
+    border-color:#007dd1;
+    color:#000000;
+}
+
+QCheckBox:focus {
+    background-color: #FFFEDC;
+    border-radius: 3px;
+    border: 1px solid;
+    border-color:#007dd1;
+    color:#000000;
+}
+
+QRadioButton:focus {
+    background-color: #FFFEDC;
+    border-radius: 3px;
+    border: 1px solid;
+    border-color:#007dd1;
+    color:#000000;
+}
+
+
+QWidget
+{
+    background-color: #FFFFFF;
+}
+
+QToolTip {
+    color: #ffffff;
+    background-color: #0058A8;
+    border: 1px solid #0058A8;
+}
+
+DLabelTitle{
+background-color: #0058A8;
+color: #FFFFFF;
+font:9pt;
+}
+
+
+QHeaderView::section
+{
+    background-color: #0058A8;
+    color: #FFFFFF;
+    font:9pt;
+}
+
+QTableWidget
+{
+    alternate-background-color: #C5EAFF;
+    selection-background-color: #0058A8;
+    color: #000000;
+    font:9pt;
+    font-weight: bold;
+
+}
+
+QTreeWidget
+{
+    alternate-background-color: #C5EAFF;
+    color: #000000;
+    font:9pt;
+    font-weight: bold;
+}
+
+QMenu
+{
+    border: 1px solid black;
+}
+
+QMenu::selected
+
+{
+    background-color: D2D2D2;
+    color:#FFFFFF;
+}
+
+
+
+/* QPushButton
+{
+    background-color: rgb(235, 250, 255, 50);
+    color: black;
+}
+
+QPushButton::enabled
+{
+    background-color: rgb(230, 243, 245, 50);
+    color: black;
+}
+
+QPushButton::!enabled
+{
+    background-color: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+QPushButton::hover
+{
+    background-color: #F5FEFF;
+}
+*/
+
+
+QGroupBox
+{
+    font-weight: bold;
+}
+
+
+
+ QScrollBar:vertical {
+     border: 1px solid #007dd1;
+     background: #fff;
+     width: 15px;
+     margin: 22px 0 22px 0;
+ }
+ QScrollBar::handle:vertical {
+     background: #007dd1;
+     min-height: 20px;
+ }
+ QScrollBar::add-line:vertical {
+     border: 1px solid #007dd1;
+     background: #fff;
+     height: 20px;
+     subcontrol-position: bottom;
+     subcontrol-origin: margin;
+ }
+
+ QScrollBar::sub-line:vertical {
+     border: 1px solid #007dd1;
+     background:#fff;
+     height: 20px;
+     subcontrol-position: top;
+     subcontrol-origin: margin;
+ }
+ QScrollBar::up-arrow:vertical{
+     border: 1px solid #007dd1;
+     image: url(:/imagens/recursos/seta-up.png);
+     max-width: 1px;
+     max-height: 1px;;
+ }
+ QScrollBar::down-arrow:vertical {
+     border: 1px solid #007dd1;
+     image: url(:/imagens/recursos/seta-comboBox.png);
+     max-width: 1px;
+     max-height: 1px;;
+ }
+
+ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+     background: none;
+ }
+
+
+
+
+QScrollBar:horizontal {
+    border: 1px solid #007dd1;
+    background: #fff;
+    height: 15px;
+    margin: 0px 20px 0 20px;
+}
+QScrollBar::handle:horizontal {
+        background: #007dd1;
+        min-height: 20px;
+}
+QScrollBar::add-line:horizontal {
+    border: 1px solid #007dd1;
+    background: #fff;
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 1px solid #007dd1;
+    background: #fff;
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+QScrollBar:left-arrow:horizontal  {
+    border: 1px solid #007dd1;
+    image: url(:/imagens/recursos/seta-left.png);
+    max-width: 1px;
+    max-height: 1px;
+}
+
+QScrollBar::right-arrow:horizontal {
+        border: 1px solid #007dd1;
+        image: url(:/imagens/recursos/seta-right.png);
+        max-width: 1px;
+        max-height: 1px;
+}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+    background: none;
+}
+
+
+Qlabel-venda{
+background-color: rgb(85, 170, 255);
+color: rgb(255, 255, 255);
+}
+
+QTabBar::close-button {
+    image: url(:/imagens/recursos/fechar-gm1-.png);
+    subcontrol-position: right;
+}

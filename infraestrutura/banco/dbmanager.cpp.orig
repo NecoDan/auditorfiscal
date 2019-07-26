@@ -1,0 +1,422 @@
+#include "dbmanager.h"
+
+// Infraestrutura
+#include "infraestrutura/banco/gm_dbutil.h"
+#include "infraestrutura/banco/gm_dsqlquery.h"
+
+const QString NAME_TABELA_ESCRITURACAO      = "ESCRITURACAO";
+const QString NAME_TABELA_DIRETORIO_PADRAO  = "DIRETORIO_PADRAO";
+const QString NAME_TABELA_ESCRITURACAO_SPED = "ESCRITURACAO_SPED";
+
+using namespace gm;
+
+DbManager::DbManager(QSqlDatabase &db)
+{
+    _db = db;
+
+    (!_db.open()) ? this->outPutDebug("Erro: falha ao conectar com o banco de dados.")
+                  : this->outPutDebug("Conexao ok");
+}
+
+DbManager::DbManager(bool carregaAmbientePadrao)
+{
+    if (carregaAmbientePadrao)
+        this->criarAmbienteDatabasePadrao();
+}
+
+GMErro DbManager::lastError()
+{
+    return _lastError;
+}
+
+void DbManager::setDatabase(QSqlDatabase &db)
+{
+    _db = db;
+}
+
+void DbManager::criarAmbienteDatabasePadrao()
+{
+    QSqlDatabase dbMaster = DBUtil::conexao();
+
+    if (dbMaster.isOpen())
+        _db = dbMaster;
+    else
+        return;
+
+    if (!isTabelaExiste(NAME_TABELA_ESCRITURACAO))
+        this->criarTabelaEscrituracaoMaster(NAME_TABELA_ESCRITURACAO);
+
+    if (!isTabelaExiste(NAME_TABELA_DIRETORIO_PADRAO))
+        this->criarTabelaDiretorioPadraoMaster(NAME_TABELA_DIRETORIO_PADRAO);
+}
+
+void DbManager::criarAmbienteApuracaoEscrituracao()
+{
+    if (!_db.open())
+        return;
+
+    if (!isTabelaExiste(NAME_TABELA_ESCRITURACAO_SPED)){
+        QList<InformacoesCampos> informacoesCampo;
+
+        informacoesCampo << getInformacoesCampos("ano", BIGINT, 4, true, true);
+        informacoesCampo << getInformacoesCampos("mes", BIGINT, 2, true, true);
+        informacoesCampo << getInformacoesCampos("cnpj", TEXTO, 14, true, true);
+        informacoesCampo << getInformacoesCampos("caminhoArquivo", TEXTO, 100);
+        informacoesCampo << getInformacoesCampos("data", DATA_HORA);
+
+        if (!criarTabela(NAME_TABELA_ESCRITURACAO_SPED, informacoesCampo))
+            this->outPutDebug("Erro ao criar TABELA " + NAME_TABELA_ESCRITURACAO_SPED + ".");
+    }
+}
+
+bool DbManager::criarTabela(QString nomeTabela, QList<InformacoesCampos> listaInformacoesCampos)
+{
+    if (isTabelaExiste(nomeTabela)){
+        _lastError = GMErro("Tabela " + nomeTabela + " já existe. Tente outro nome.", GMErro::VALIDACAO);
+        this->outPutDebug(_lastError.mensagem());
+        return false;
+    }
+
+    bool success = false;
+    int numRows = 0;
+
+    QSqlQuery query(_db);
+    QString queryStringSQL = "CREATE TABLE :name (";
+    queryStringSQL.append("id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+
+    foreach (InformacoesCampos informacoes, listaInformacoesCampos){
+        double size = informacoes.tamanhoCampo;
+        bool invalidoTamanhoCampo = (size <= 0 && informacoes.tipoCampo != TiposCampos::DATA && informacoes.tipoCampo != TiposCampos::DATA_HORA);
+
+        if (invalidoTamanhoCampo){
+            _lastError = GMErro("Tamanho do campo " + informacoes.nomeCampo + " é inválido.", GMErro::BANCO);
+            return false;
+        }
+
+        queryStringSQL.append(informacoes.nomeCampo);
+        queryStringSQL.append(this->getTipoCampo(informacoes.tipoCampo, size));
+        queryStringSQL.append(informacoes.notNull ? " NOT NULL " : " ");
+        queryStringSQL.append(informacoes.chaveUnica ? " UNIQUE " : " ");
+
+        if (++numRows < listaInformacoesCampos.size())
+            queryStringSQL.append(", ");
+    }
+
+    queryStringSQL.append(");");
+    queryStringSQL.replace(":name", nomeTabela);
+    this->outPutDebug(queryStringSQL);
+
+    if (query.exec(queryStringSQL))
+        success = true;
+
+    if (!success){
+        _lastError = GMErro("Erro ao criar tabela: " + query.lastError().text(), GMErro::BANCO);
+        this->outPutDebug("criarTabela erro:  " + query.lastError().text());
+    }
+
+    query.finish();
+    return success;
+}
+
+bool DbManager::isTabelaExiste(QString nomeTabela)
+{
+    bool success = false;
+    QSqlQuery query(_db);
+    QString sql = "SELECT name FROM sqlite_master WHERE type='table' AND name=':nomeTabela';";
+
+    sql.replace(":nomeTabela", nomeTabela);
+
+    if (!query.exec(sql)){
+        _lastError = GMErro("Erro ao verificar se tabela existe: " + query.lastError().text(), GMErro::BANCO);
+        this->outPutDebug("verificarSeTabelaExiste erro:  " + query.lastError().text());
+    }
+
+    while (query.next())
+        success = true;
+
+    query.finish();
+    return success;
+}
+
+bool DbManager::addRegistroEscrituracao(gm_escrituracao::Escrituracao* escrituracao)
+{
+    if (!isTabelaExiste(NAME_TABELA_ESCRITURACAO)){
+        _lastError = GMErro("A tabela ESCRITURACAO ainda não existe. Crie antes para inserir nela.", GMErro::VALIDACAO);
+        return false;
+    }
+
+    bool success = true;
+    QSqlQuery query(_db);
+    QString queryStringSQL = " INSERT INTO ESCRITURACAO (ano, mes, nomeDatabase, descricaoFilial, cnpjRaizEmpresa, inscricaoEstadual) "
+                  " VALUES (:ano, :mes, ':nomeDatabase', ':descricaoFilial', ':cnpjRaizEmpresa', :inscricaoEstadual );     ";
+
+    queryStringSQL.replace(":ano", QString::number(escrituracao->ano()));
+    queryStringSQL.replace(":mes", QString::number(escrituracao->mes()));
+    queryStringSQL.replace(":nomeDatabase", escrituracao->nomeDatabase());
+    queryStringSQL.replace(":descricaoFilial", escrituracao->descricaoFilial());
+    queryStringSQL.replace(":cnpjRaizEmpresa", escrituracao->cnpjRaizEmpresa());
+    queryStringSQL.replace(":inscricaoEstadual", QString::number(escrituracao->inscricaoEstadual()));
+
+    if (!query.exec(queryStringSQL)) {
+        success = false;
+        _lastError = GMErro("Erro criar registro em ESCRITURACAO: " + query.lastError().text(), GMErro::BANCO);
+        this->outPutDebug("addRegistroEscrituracao erro:  " + _lastError.mensagem());
+    }
+
+    query.finish();
+    return success;
+}
+
+<<<<<<< HEAD
+bool DbManager::addRegistro(QString nomeTabela, QList<InformacoesCampos> listaCampos)
+{
+//    if (!isTabelaExiste(nomeTabela)){
+//        _lastError = GMErro("A tabela " + nomeTabela + " ainda não existe. Crie antes para inserir nela.", GMErro::VALIDACAO);
+//        return false;
+//    }
+
+//    int numRows = 0;
+//    bool success = true;
+//    QSqlQuery query(_db);
+//    QString sql = " INSERT INTO " + nomeTabela + " ( ";
+
+//    foreach(QString nomeCampo, listaCampos)
+//    {
+//        numRows++;
+//        sql.append(nomeCampo);
+
+//        if(numRows < listaCampos.size())
+//            sql.append(", ");
+//        else if(numRows == listaCampos.size())
+//            sql.append(") ");
+//    }
+
+//    numRows = 0;
+//    sql.append(" VALUES (");
+
+////    foreach(QList<InformacoesCampos> listaCampos, listaCampos.values())
+////    {
+////        numRows++;
+
+////        foreach(InformacoesCampos informacoes, listaCampos)
+////        {
+////            sql.append(campo);
+
+////            if(campo.toLongLong() == 0 && campo)
+
+////            if(numRows < listaCampos.size())
+////                sql.append(", ");
+////            else if(numRows == listaCampos.size())
+////                sql.append("); ");
+////        }
+
+////    }
+
+//    ":ano, :mes, ':nomeDatabase', ':descricaoFilial', ':cnpjRaizEmpresa', :inscricaoEstadual );     ";
+
+//    sql.replace(":ano", QString::number(escrituracao->ano()));
+//    sql.replace(":mes", QString::number(escrituracao->mes()));
+//    sql.replace(":nomeDatabase", escrituracao->nomeDatabase());
+//    sql.replace(":descricaoFilial", escrituracao->descricaoFilial());
+//    sql.replace(":cnpjRaizEmpresa", escrituracao->cnpjRaizEmpresa());
+//    sql.replace(":inscricaoEstadual", QString::number(escrituracao->inscricaoEstadual()));
+
+//    if (!query.exec(sql)) {
+//        success = false;
+//        _lastError = GMErro("Erro criar registro em ESCRITURACAO: " + query.lastError().text(), GMErro::BANCO);
+//        this->outPutDebug("addRegistroEscrituracao erro:  " + _lastError.mensagem());
+//    }
+
+//    query.finish();
+//    return success;
+=======
+bool DbManager::inserir(QString nomeTabela, QString conteudoStringQuery)
+{
+    bool success = true;
+
+    if (!isTabelaExiste(nomeTabela)){
+        _lastError = GMErro("Erro! A tabela " + nomeTabela + " ainda não existe. Crie antes para inserir nela.", GMErro::VALIDACAO);
+        return success = false;
+    }
+
+    QString queryStringSql = " INSERT INTO ";
+    queryStringSql.append(nomeTabela);
+    queryStringSql.append(conteudoStringQuery);
+
+    QSqlQuery query(_db);
+
+    if (!query.exec(queryStringSql)) {
+        _lastError = GMErro("Erro criar registro na tabela " + nomeTabela + ":" + query.lastError().text(), GMErro::BANCO);
+        this->outPutDebug(_lastError.mensagem());
+        return success = false;
+    }
+
+    query.finish();
+    return success;
+>>>>>>> 89ea464d36a018c0cef1a56fdbf4551449ec58ca
+}
+
+void DbManager::criarTabelaEscrituracaoMaster(QString nomeTabela)
+{
+    QList<InformacoesCampos> listaInformacoes;
+
+    listaInformacoes << getInformacoesCampos("ano", BIGINT, 4, true, true);
+    listaInformacoes << getInformacoesCampos("mes", BIGINT, 2, true, true);
+    listaInformacoes << getInformacoesCampos("cnpjRaizEmpresa", TEXTO, 14, true, true);
+    listaInformacoes << getInformacoesCampos("cnpj", TEXTO, 14, true, true);
+    listaInformacoes << getInformacoesCampos("descricaoFilial", TEXTO, 150);
+    listaInformacoes << getInformacoesCampos("inscricaoEstadual", BIGINT, 15);
+    listaInformacoes << getInformacoesCampos("nomeDatabase", TEXTO, 100);
+    listaInformacoes << getInformacoesCampos("data", DATA_HORA);
+
+    if (!criarTabela(nomeTabela, listaInformacoes))
+        this->outPutDebug("Erro ao criar TABELA " + nomeTabela + ".");
+}
+
+void DbManager::criarTabelaDiretorioPadraoMaster(QString nomeTabela)
+{
+    QList<InformacoesCampos> informacoesCampo;
+    informacoesCampo << getInformacoesCampos("caminho", TEXTO, 200);
+    informacoesCampo << getInformacoesCampos("data", DATA_HORA);
+
+    if (!criarTabela(nomeTabela, informacoesCampo))
+        this->outPutDebug("erro ao criar TABELA " + nomeTabela + ".");
+}
+
+bool DbManager::removeRegistroEscrituracao(QMap<QString, QVariant> mapCampos)
+{
+    if (!isTabelaExiste(NAME_TABELA_ESCRITURACAO)){
+        _lastError = gm::GMErro("A tabela ESCRITURACAO ainda não existe. Crie antes para inserir nela.", gm::GMErro::VALIDACAO);
+        return false;
+    }
+
+    if (mapCampos.isEmpty()){
+        _lastError = gm::GMErro("Insira ao menos uma condição para o DELETE ser aplicado.", gm::GMErro::VALIDACAO);
+        return false;
+    }
+
+    bool success = true;
+    QSqlQuery query(_db);
+    QString sql = " DELETE ESCRITURACAO WHERE ";
+
+    foreach(QVariant dado, mapCampos.values())
+    {
+        QString nomeCampo = mapCampos.key(dado);
+        sql.append(nomeCampo + " = ");
+
+        if(dado.toLongLong() > 0)
+            sql.append(QString::number(dado.toLongLong()));
+        else if(!dado.toString().isEmpty())
+            sql.append("'" + dado.toString() + "'");
+    }
+
+    sql.append(";");
+
+    if (!query.exec(sql)){
+        success = false;
+        _lastError = gm::GMErro("Erro deletar registro em ESCRITURACAO: " + query.lastError().text(), gm::GMErro::BANCO);
+        this->outPutDebug("removeRegistroEscrituracao erro:  " + _lastError.mensagem());
+    }
+
+    query.finish();
+    return success;
+}
+
+bool DbManager::atualizarRegistroEscrituracao(QMap<QString, QVariant> mapCampos, long long id)
+{
+    if(!isTabelaExiste(NAME_TABELA_ESCRITURACAO))
+    {
+        _lastError = gm::GMErro("A tabela ESCRITURACAO ainda não existe. Crie antes para inserir nela.", gm::GMErro::VALIDACAO);
+        return false;
+    }
+
+    if(id <= 0)
+    {
+        _lastError = gm::GMErro("O id do registro está zerado. Para executar o UPDATE, insira um id válido.", gm::GMErro::VALIDACAO);
+        return false;
+    }
+
+    if(mapCampos.isEmpty())
+    {
+        _lastError = gm::GMErro("Insira ao menos uma condição para o UPDATE ser aplicado.", gm::GMErro::VALIDACAO);
+        return false;
+    }
+
+    bool success = false;
+    QSqlQuery query(_db);
+    QString sql = " UPDATE ESCRITURACAO SET ";
+    int numRows = 0;
+
+    foreach(QVariant dado, mapCampos.values())
+    {
+        QString nomeCampo = mapCampos.key(dado);
+        sql.append(nomeCampo + " = ");
+
+        if(dado.toLongLong() > 0)
+            sql.append(QString::number(dado.toLongLong()));
+        else if(!dado.toString().isEmpty())
+            sql.append("'" + dado.toString() + "'");
+
+        if(++numRows < mapCampos.size())
+            sql.append(", ");
+    }
+
+    sql.append("WHERE id = " + QString::number(id) + ";");
+    this->outPutDebug(sql);
+
+    if (query.exec(sql))
+        success = true;
+
+    if (!success){
+        _lastError = gm::GMErro("Erro ao atualizar registro tabela: " + query.lastError().text(), gm::GMErro::BANCO);
+        this->outPutDebug("atualizarRegistroEscrituracao erro:  " + _lastError.mensagem());
+    }
+
+    query.finish();
+    return success;
+}
+
+DbManager::InformacoesCampos DbManager::getInformacoesCampos(QString nomeCampo, DbManager::TiposCampos tipoCampo,
+                                                             long long tamanhoCampo, bool notNull, bool chaveUnica)
+{
+    InformacoesCampos informacoes;
+
+    informacoes.nomeCampo = nomeCampo;
+    informacoes.tipoCampo = tipoCampo;
+    informacoes.tamanhoCampo = tamanhoCampo;
+    informacoes.notNull = notNull;
+    informacoes.chaveUnica = chaveUnica;
+
+    return informacoes;
+}
+
+QString DbManager::getTipoCampo(DbManager::TiposCampos tipo, long long tamanho)
+{
+    QString tipoString;
+
+    switch(tipo)
+    {
+    case NUMERICO:
+        tipoString = " NUMERIC (" + QString::number(tamanho) + ",2) ";
+        break;
+    case TEXTO:
+        tipoString = " VARCHAR (" + QString::number(tamanho) + ",5) ";
+        break;
+    case DATA:
+        tipoString = " DATE ";
+        break;
+    case DATA_HORA:
+        tipoString = " DATETIME DEFAULT CURRENT_TIMESTAMP ";
+        break;
+    case BIGINT:
+        tipoString = " BIGINT (" + QString::number(tamanho) + ") ";
+        break;
+    }
+
+    return tipoString;
+}
+
+void DbManager::outPutDebug(QVariant value)
+{
+    qDebug() << value.toString();
+}

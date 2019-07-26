@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DVisualizarArquivos</class>
+ <widget class="QDialog" name="DVisualizarArquivos">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>890</width>
+    <height>389</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Visualizar Arquivos</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../auditoriafiscal.qrc">
+    <normaloff>:/imagens/infraestrutura/recursos/imagens/sped.png</normaloff>:/imagens/infraestrutura/recursos/imagens/sped.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lArquivosImportados">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Arquivos Importados</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pbVoltar">
+       <property name="text">
+        <string>Voltar</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../auditoriafiscal.qrc">
+         <normaloff>:/imagens/infraestrutura/recursos/imagens/seta_esquerda.png</normaloff>:/imagens/infraestrutura/recursos/imagens/seta_esquerda.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>438</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pbCarregar">
+       <property name="text">
+        <string>Carregar</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../auditoriafiscal.qrc">
+         <normaloff>:/imagens/infraestrutura/recursos/imagens/ok_45.png</normaloff>:/imagens/infraestrutura/recursos/imagens/ok_45.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTreeWidget" name="twArquivos">
+     <property name="styleSheet">
+      <string notr="true"> QTreeWidget::item 
+ { 
+     border-bottom: 1px solid #aaa; 
+     border-right: 1px solid #aaa; 
+     border-left: 1px solid #aaa; 
+     selection-color: rgb(255,255,255); 
+ } 
+  
+ QTreeView::item:selected:active 
+ { 
+     background-color: rgb(0, 0, 255); 
+ } 
+  
+ QTreeView::item:selected:!active 
+ { 
+     background-color: rgb(0, 0, 255); 
+     selection-color: rgb(255, 255, 255); 
+ } 
+  
+ QTreeView::branch:has-siblings:!adjoins-item 
+ { 
+     border-image: url(:/imagens/infraestrutura/recursos/imagens/vline.png) 0; 
+ } 
+  
+ QTreeView::branch:has-siblings:adjoins-item 
+ { 
+     border-image: url(:/imagens/infraestrutura/recursos/imagens/branch-more.png) 0; 
+ } 
+  
+ QTreeView::branch:!has-children:!has-siblings:adjoins-item 
+ { 
+     border-image: url(:/imagens/infraestrutura/recursos/imagens/branch-end.png) 0; 
+ } 
+  
+ QTreeView::branch:has-children:!has-siblings:closed, QTreeView::branch:closed:has-children:has-siblings 
+ { 
+     border-image: none; 
+     image: url(:/imagens/infraestrutura/recursos/imagens/branch-closed.png); 
+ } 
+  
+QTreeView::branch:open:has-children:!has-siblings,
+ QTreeView::branch:open:has-children:has-siblings  {
+         border-image: none;
+         image: url(:/imagens/infraestrutura/recursos/imagens/branch-open.png);
+ }</string>
+     </property>
+     <column>
+      <property name="text">
+       <string>Ano/CNPJ Raiz/CNPJ/Filial</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Insc.Estadual</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Dt Modificação</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nome Banco</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../auditoriafiscal.qrc"/>
+ </resources>
+ <connections/>
+</ui>

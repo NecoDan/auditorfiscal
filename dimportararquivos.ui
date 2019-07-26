@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DImportarArquivos</class>
+ <widget class="QDialog" name="DImportarArquivos">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>616</width>
+    <height>349</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Importar Arquivos</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="auditoriafiscal.qrc">
+    <normaloff>:/imagens/infraestrutura/recursos/imagens/sped.png</normaloff>:/imagens/infraestrutura/recursos/imagens/sped.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="title">
+      <string>Diretório Padrão</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLineEdit" name="leDiretorioPadrao">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>31</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pbSelecionarDiretorioPadrao">
+        <property name="toolTip">
+         <string>Clique &lt;b&gt;aqui&lt;/b&gt; para selecionar o diretório padrão.</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="auditoriafiscal.qrc">
+          <normaloff>:/imagens/infraestrutura/recursos/imagens/open.png</normaloff>:/imagens/infraestrutura/recursos/imagens/open.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="pbLimpar">
+        <property name="minimumSize">
+         <size>
+          <width>37</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>37</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Clique &lt;b&gt;aqui&lt;/b&gt; para &lt;b&gt;limpar&lt;/b&gt; o diretório padrão.</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="auditoriafiscal.qrc">
+          <normaloff>:/imagens/infraestrutura/recursos/imagens/limpar.png</normaloff>:/imagens/infraestrutura/recursos/imagens/limpar.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pbSelecionarArquivos">
+       <property name="text">
+        <string>Selecionar Arquivos</string>
+       </property>
+       <property name="icon">
+        <iconset resource="auditoriafiscal.qrc">
+         <normaloff>:/imagens/infraestrutura/recursos/imagens/icon-visualizar.png</normaloff>:/imagens/infraestrutura/recursos/imagens/icon-visualizar.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="3">
+      <widget class="QTableWidget" name="tbwArquivos">
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <column>
+        <property name="text">
+         <string/>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Arquivos</string>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string/>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="chkSelecionarTodos">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Selecionar Todos</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="3" column="0">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pbVoltar">
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Voltar</string>
+       </property>
+       <property name="icon">
+        <iconset resource="auditoriafiscal.qrc">
+         <normaloff>:/imagens/infraestrutura/recursos/imagens/seta_esquerda.png</normaloff>:/imagens/infraestrutura/recursos/imagens/seta_esquerda.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>408</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pbCarregar">
+       <property name="minimumSize">
+        <size>
+         <width>90</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Carregar</string>
+       </property>
+       <property name="icon">
+        <iconset resource="auditoriafiscal.qrc">
+         <normaloff>:/imagens/infraestrutura/recursos/imagens/ok_45.png</normaloff>:/imagens/infraestrutura/recursos/imagens/ok_45.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="auditoriafiscal.qrc"/>
+ </resources>
+ <connections/>
+</ui>
