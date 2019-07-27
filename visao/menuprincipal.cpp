@@ -1,11 +1,11 @@
-#include "menuprincipal.h"
+#include "visao/menuprincipal.h"
 #include "ui_menuprincipal.h"
 
 #include <QTime>
 #include <QTimer>
 #include <QDesktopWidget>
 
-#include "dimportararquivos.h"
+#include "visao/dimportararquivos.h"
 #include "visao/dvisualizararquivos.h"
 
 MenuPrincipal::MenuPrincipal(QWidget *parent) : QMainWindow(parent), ui(new Ui::MenuPrincipal)

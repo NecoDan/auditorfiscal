@@ -1,5 +1,3 @@
-#include "menuprincipal.h"
-
 #include <QApplication>
 #include <csignal>
 #include <QCoreApplication>
@@ -11,6 +9,9 @@
 #include <QSqlDatabase>
 #include <QThread>
 #include <QObject>
+
+// Visão
+#include "visao/menuprincipal.h"
 
 // Infraestrutura
 #include "infraestrutura/negocios/gm_negocioteste.h"
@@ -26,10 +27,7 @@ void funcaoTestes()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    QCoreApplication::setOrganizationName("It Happens");
-    QCoreApplication::setOrganizationDomain("www.grupomateus.com.br");
-    QCoreApplication::setApplicationName("Auditor Fiscal 2018");
+    QCoreApplication::setApplicationName("Auditor Fiscal 2019");
 
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 #if QT_VERSION < 0x050000

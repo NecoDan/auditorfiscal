@@ -46,9 +46,11 @@ SOURCES += \
     diretoriopadrao/dao/escrituracao_diretoriopadraodao.cpp \
     diretoriopadrao/negocio/escrituracao_diretoriopadraonegocio.cpp \
     escrituracao/dao/escrituracao_escrituracaodao.cpp \
+    escrituracao/dao/escrituracao_escrituracaospeddao.cpp \
     escrituracao/dominio/escrituracao_escrituracao.cpp \
-    escrituracao/negocio/escrituracao_escrituracaonegocio.cpp \
+    escrituracao/dominio/escrituracao_escrituracaospedmovimentacao.cpp \
     escrituracao/dominio/escrituracao_escrituracaosped.cpp \
+    escrituracao/negocio/escrituracao_escrituracaonegocio.cpp \
     escrituracao/negocio/escrituracao_escrituracaonegociocontroller.cpp \
     infraestrutura/gm_erro.cpp \
     infraestrutura/banco/dbmanager.cpp \
@@ -66,13 +68,11 @@ SOURCES += \
     infraestrutura/visao/subclasses_qt/dwidget.cpp \
     infraestrutura/visao/dmessagebox.cpp \
     infraestrutura/constantes/ub_constantes.cpp \
+    infraestrutura/banco/gm_dbconnection.cpp \
     visao/dvisualizararquivos.cpp \
-    menuprincipal.cpp \
-    dimportararquivos.cpp \
-    escrituracao/dao/escrituracao_escrituracaospeddao.cpp \
-    visao/dresumoauditoria.cpp \
-    escrituracao/dominio/escrituracao_escrituracaospedmovimentacao.cpp \
-    infraestrutura/banco/gm_dbconnection.cpp
+    visao/menuprincipal.cpp \
+    visao/dimportararquivos.cpp \
+    visao/dresumoauditoria.cpp
 
 HEADERS += \
     arquivos/negocio/arquivo_arquivonegocio.h \
@@ -85,9 +85,11 @@ HEADERS += \
     diretoriopadrao/dao/escrituracao_diretoriopadraodao.h \
     diretoriopadrao/negocio/escrituracao_diretoriopadraonegocio.h \
     escrituracao/dao/escrituracao_escrituracaodao.h \
+    escrituracao/dao/escrituracao_escrituracaospeddao.h \
     escrituracao/dominio/escrituracao_escrituracao.h \
-    escrituracao/negocio/escrituracao_escrituracaonegocio.h \
     escrituracao/dominio/escrituracao_escrituracaosped.h \
+    escrituracao/dominio/escrituracao_escrituracaospedmovimentacao.h \
+    escrituracao/negocio/escrituracao_escrituracaonegocio.h \
     escrituracao/negocio/escrituracao_escrituracaonegociocontroller.h \
     infraestrutura/gm_erro.h \
     infraestrutura/stringutil.h \
@@ -105,21 +107,19 @@ HEADERS += \
     infraestrutura/visao/subclasses_qt/dwidget.h \
     infraestrutura/visao/dmessagebox.h \
     infraestrutura/constantes/constantes_icones.h \
-    visao/dvisualizararquivos.h \
-    menuprincipal.h \
-    dimportararquivos.h \
-    escrituracao/dao/escrituracao_escrituracaospeddao.h \
-    visao/dresumoauditoria.h \
-    escrituracao/dominio/escrituracao_escrituracaospedmovimentacao.h \
     infraestrutura/banco/gm_dbconnection.h \
-    infraestrutura/gm_itemutil.h
+    infraestrutura/gm_itemutil.h \
+    visao/dvisualizararquivos.h \
+    visao/menuprincipal.h \
+    visao/dimportararquivos.h \
+    visao/dresumoauditoria.h
 
 FORMS += \
-    menuprincipal.ui \
-    dimportararquivos.ui \
-    infraestrutura/visao/dprogressstatus.ui \
+    visao/menuprincipal.ui \
+    visao/dimportararquivos.ui \
     visao/dvisualizararquivos.ui \
-    visao/dresumoauditoria.ui
+    visao/dresumoauditoria.ui \
+    infraestrutura/visao/dprogressstatus.ui
 
 RESOURCES += \
     auditoriafiscal.qrc
